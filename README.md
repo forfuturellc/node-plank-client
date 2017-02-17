@@ -8,7 +8,7 @@
 ## installation:
 
 ```bash
-$ npm install --save forfuturellc/plank-client
+$ npm install --save plank-client
 ```
 
 > **Please the examples in `example/` directory, while we work on
