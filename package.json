@@ -1,0 +1,45 @@
+{
+  "name": "plank-client",
+  "version": "0.0.0",
+  "description": "Client for the Plank Bridge",
+  "author": "GochoMugo (www.gmugo.in)",
+  "homepage": "https://github.com/forfuturellc/node-plank-client#readme",
+  "license": "MIT",
+  "main": "lib/index.js",
+  "bin": {
+    "plank": "bin/plank"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/forfuturellc/node-plank-client.git"
+  },
+  "bugs": {
+    "url": "https://github.com/forfuturellc/node-plank-client/issues"
+  },
+  "engines": {
+    "node": ">=6"
+  },
+  "scripts": {
+    "test": "grunt test"
+  },
+  "keywords": [
+    "client",
+    "plank",
+    "bridge"
+  ],
+  "dependencies": {
+    "chalk": "^1.1.3",
+    "cli-output": "^1.0.0",
+    "commander": "^2.9.0",
+    "debug": "^2.6.1",
+    "inquirer": "^3.0.1",
+    "request": "^2.79.0",
+    "ws": "^1.1.1"
+  },
+  "devDependencies": {
+    "grunt": "^1.0.1",
+    "grunt-cli": "^1.2.0",
+    "grunt-eslint": "^19.0.0",
+    "load-grunt-tasks": "^3.5.2"
+  }
+}
