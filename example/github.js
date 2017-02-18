@@ -57,13 +57,15 @@ client.on("ready", () => {
     });
 });
 
-// listen for messages and process github payload then send via telegram transport
+// listen for messages and process github payload
 client.on("message", payload => {
     let ctx = JSON.parse(payload.body.payload);
     let msg = `Commit: ${ctx.commits[0].id}
                Message: ${ctx.commits[0].message}
                By: ${ctx.commits[0].author.name}`;
+    // handle the data sent by github
     console.log(msg);
+
 });
 
 // handle errors
