@@ -8,11 +8,14 @@
 /* eslint-disable no-console */
 
 
+// npm-installed modules
+const request = require("request");
+
 // own modules
-const plank = require('..');
+const plank = require("..");
 
 // module variables
-const token = process.argv[2] || 'public';
+const token = process.argv[2] || "public";
 const client = new plank.WebSocket(token);
 const telegram = {
     token: process.env.TELEGRAM_TOKEN,
@@ -24,50 +27,47 @@ const github = {
     repo: process.env.GITHUB_REPO,
 };
 
-// npm-installed modules
-const request = require('request');
-
 // set webhook after plank connection
-client.on('ready', () => {
-    console.log('Client ready');
+client.on("ready", () => {
+    console.log("Client ready");
     const opts = {
         url: `https://api.github.com/repos/${github.username}/${github.repo}/hooks`,
         headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'Accept': 'application/vnd.github.v3+json',
-            'Authorization': 'token ' + github.token,
-            'User-Agent': 'node-plank-client/0.1'
+            "Content-Type": "application/x-www-form-urlencoded",
+            "Accept": "application/vnd.github.v3+json",
+            "Authorization": "token " + github.token,
+            "User-Agent": "node-plank-client/0.1"
         },
         body: JSON.stringify({
-            'name': 'web',
-            'active': true,
-            'events': ['push'],
-            'config': {
-                'url': client.urls.websocket.replace(/^ws/, 'http'),
-                'content-type': 'json'
+            "name": "web",
+            "active": true,
+            "events": ["push"],
+            "config": {
+                "url": client.urls.websocket.replace(/^ws/, "http"),
+                "content-type": "json"
             }
         })
     };
-    request.post(opts);
+    request.post(opts, (error, response, body) => {
+        if (!error && response.statusCode == 200) {
+            console.log(body);
+        } else {
+            console.log(error);
+        }
+    });
 });
 
 // listen for messages and process github payload then send via telegram transport
-client.on('message', payload => {
+client.on("message", payload => {
     let ctx = JSON.parse(payload.body.payload);
-    let msg = `*Commit: *${ctx.commits[0].id}\n*Message: *${ctx.commits[0].message}\n*By: *${ctx.commits[0].author.name}`;
-    let opts = {
-        url: `https://api.telegram.org/bot${telegram.token}/sendMessage`,
-        qs: {
-            'chat_id': telegram.chat_id,
-            'text': msg,
-            'parse_mode': 'Markdown'
-        }
-    };
-    request.get(opts);
+    let msg = `Commit: ${ctx.commits[0].id}
+               Message: ${ctx.commits[0].message}
+               By: ${ctx.commits[0].author.name}`;
+    console.log(msg);
 });
 
 // handle errors
-client.on('error', error => {
+client.on("error", error => {
     console.error(error);
     process.exit(1);
 });

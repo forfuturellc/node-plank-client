@@ -8,40 +8,42 @@
 /* eslint-disable no-console */
 
 
+// npm-installed modules
+const Tgfancy = require("tgfancy");
+
 // own modules
-const plank = require('..');
+const plank = require("..");
 
 // module variables
-const token = process.argv[2] || 'public';
+const token = process.argv[2] || "public";
 const botToken = process.env.TELEGRAM_TOKEN;
 const client = new plank.WebSocket(token);
-
-// npm-installed modules
-const Tgfancy = require('tgfancy');
 
 // setup bot
 const bot = new Tgfancy(botToken);
 
 // set webhook after plank connection
-client.on('ready', () => {
-    console.log('Client ready');
-    bot.setWebHook(client.urls.websocket.replace(/^ws/, 'http')).then(ctx => {
-        ctx == true ? console.log('Webhook was set!') : console.log('Error: Webhook could not be set');
+client.on("ready", () => {
+    console.log("Client ready");
+    bot.setWebHook(client.urls.websocket.replace(/^ws/, "http")).then(ctx => {
+        ctx == true ? console.log("Webhook was set!") : console.log("Error: Webhook could not be set");
+    }).catch(err => {
+        console.log(err);
     });
 });
 
 // listen for messages and process bot updates
-client.on('message', payload => {
+client.on("message", payload => {
     bot.processUpdate(payload.body);
 });
 
 // handle errors
-client.on('error', error => {
+client.on("error", error => {
     console.error(error);
     process.exit(1);
 });
 
 // just to ping!
-bot.on('message', msg => {
-    bot.sendMessage(msg.chat.id, 'I am alive!');
+bot.on("message", msg => {
+    bot.sendMessage(msg.chat.id, "I am alive!");
 });
