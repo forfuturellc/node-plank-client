@@ -9,7 +9,7 @@
 
 
 // npm-installed modules
-const Tgfancy = require("tgfancy");
+const TelegramBot = require("node-telegram-bot-api");
 
 // own modules
 const plank = require("..");
@@ -20,7 +20,7 @@ const botToken = process.env.TELEGRAM_TOKEN;
 const client = new plank.WebSocket(token);
 
 // setup bot
-const bot = new Tgfancy(botToken);
+const bot = new TelegramBot(botToken);
 
 // set webhook after plank connection
 client.on("ready", () => {
