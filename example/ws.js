@@ -17,7 +17,7 @@ const token = process.argv[2] || "public";
 const client = new plank.WebSocket(token);
 
 
-console.log("HTTP:      %s", client.urls.websocket.replace(/^ws/, "http"));
+console.log("HTTP:      %s", client.urls.http);
 console.log("WebSocket: %s", client.urls.websocket);
 
 
