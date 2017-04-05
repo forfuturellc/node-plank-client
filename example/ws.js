@@ -13,8 +13,9 @@ const plank = require("..");
 
 
 // module variables
-const token = process.argv[2] || "public";
+const token = process.env.PLANK_TOKEN || "public";
 const client = new plank.WebSocket(token);
+const proxy = process.argv[2];
 
 
 console.log("HTTP:      %s", client.urls.http);
@@ -30,12 +31,29 @@ client.on("ready", function() {
 // listen for messages
 client.on("message", function(payload) {
     const date = new Date();
-    console.log("[%s] New Request:", date.toTimeString());
+    console.log("[%s]\nNew Request:", date.toTimeString());
     console.log("  path   =", payload.path);
     console.log("  method =", payload.method);
     console.log("  qs     =", payload.qs);
     console.log("  body   =", payload.body);
-    console.log("");
+    if (!proxy) {
+        console.log("");
+        return;
+    }
+
+    console.log("Proxying to:", proxy);
+    plank.http.request(proxy, payload, function(error, body) {
+        if (error) {
+            console.error("Error occurred during proxying:");
+            console.error(indent(error.message));
+            return;
+        }
+        const msg = JSON.stringify(body, null, 2);
+        console.log(indent(msg));
+    });
+    function indent(text) {
+        return text.split("\n").map(l => `  ${l}`).join("\n");
+    }
 });
 
 

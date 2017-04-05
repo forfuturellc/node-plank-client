@@ -13,7 +13,7 @@ const plank = require("..");
 
 
 // module variables
-const token = process.argv[2] || "public";
+const token = process.env.PLANK_TOKEN || "public";
 
 
 plank.http.bridge(token, {
